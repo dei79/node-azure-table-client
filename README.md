@@ -1,5 +1,11 @@
 # node-azure-table-client
-A simple to use client for Azure Table Store which allows model definitions (comparable to an ORM) and correct type conversion.
+A simple to use client for Azure Table Store which allows model definitions (comparable to an ORM) and correct type conversion. The componet comes with a coupel useful features:
+
+* Using simple javascript objects
+* String type conversion of objects during serialization 
+* Insert, Merge & Query operations
+* Batch Operations for multiple hundred or thousand records
+* Validation against the defined weak schema
 
 ## Configure
 The table client needs to be configured before using it the first time. The configuration can be performed as follows:
@@ -29,10 +35,7 @@ var Person = azureTables.define({
 
 There are two special fields, the PartitionKey and the RowKey which are used in Azure Tables to identify a single record. During the model defintion a function needs to be defined which can calculate the values during operations against the storage services. When ever the system calls the Azure Storage Services it's recalculating the partition and row key.
 
-## Create, Update & DeleteModels
-Every model also in Azure Table has the typically lifecycle, it will be created, updated and removed sometime. The following section described the operations the Azure Table Client offers for this.
-
-### Build & store a new model-instance
+## Build & store a new model-instance
 A new model instance is just a simple presentation of the model in the memory. It does not need to be stored in the Azure Storage Services. It's normally the first step to creat models and is used often when objects will be received:
 
 ```javascript
@@ -58,6 +61,14 @@ person1.merge();
 ```
 
 Both operations will create a new instance if no instance exists in the storage services. 
+
+## Query models 
+
+TODO
+
+## Batch creation or update
+
+TODO 
 
 ## Query Mapping
 
