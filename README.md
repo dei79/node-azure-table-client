@@ -7,6 +7,13 @@ A simple to use client for Azure Table Store which allows model definitions (com
 * Batch Operations for multiple hundred or thousand records
 * Validation against the defined weak schema
 
+## Install 
+Just install the component via npm
+
+```
+npm install azure-table-client --save
+```
+
 ## Configure
 The table client needs to be configured before using it the first time. The configuration can be performed as follows:
 
