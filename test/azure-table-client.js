@@ -259,7 +259,7 @@ describe('AzureTableClient', function() {
         });
 
         it("returns valid default objects with double as string", function() {
- 
+
             sinon.stub(Account.azureCalls, "queryEntities", function (tableName, tableQuery, currentToken, optionsOrCallback, callback) {
                 var results = {
                     entries: [
