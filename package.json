@@ -1,0 +1,40 @@
+{
+  "name": "azure-table-client",
+  "description": "A simple to use client for Azure Table Store which allows model definitions (comparable to an ORM) and correct type conversion.",
+  "version": "0.0.1",
+  "author": "Dirk Eisenberg",
+  "main": "./lib/azure-table-client.js",
+  "dependencies": {
+    "q": "^2.0.2",
+    "azure-storage": "^0.3.2"
+  },
+  "devDependencies": {
+    "chai": "^1.10.0",
+    "chai-as-promised": "^4.1.1",
+    "grunt": "^0.4.5",
+    "grunt-contrib-watch": "^0.6.1",
+    "grunt-mocha-test": "^0.12.4",
+    "load-grunt-tasks": "^2.0.0",
+    "mocha": "^2.1.0",
+    "should": "^4.4.2",
+    "sinon": "^1.12.2",
+    "sinon-as-promised": "^2.0.3"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dei79/node-azure-table-client.git"
+  },
+  "keywords": [
+    "azure",
+    "table",
+    "node"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dei79/node-azure-table-client/issues"
+  },
+  "homepage": "https://github.com/dei79/node-azure-table-client"
+}
