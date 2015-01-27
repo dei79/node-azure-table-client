@@ -328,4 +328,42 @@ describe('AzureTableClient', function() {
         })
 
     });
+
+    describe('delete', function() {
+
+        it('allows to remove single entities', function() {
+            sinon.stub(Account.azureCalls, "executeBatch", function (tableName, batch, callback) {
+                tableName.should.be.equal('AccountsCollection');
+                batch.operations.length.should.be.eql(1);
+                batch.operations[0].type.should.be.equal('DELETE');
+                batch.operations[0].entity.PartitionKey._.should.be.equal('Dirk');
+                batch.operations[0].entity.RowKey._.should.be.equal('info@example.com');
+
+                callback(null, null, null);
+            });
+
+            var account = Account.build({AccountId: "Dirk", Contact:"info@example.com"});
+            return account.delete().should.be.fulfilled;
+        });
+
+        it('allows to remove multiple entities', function() {
+            sinon.stub(Account.azureCalls, "executeBatch", function (tableName, batch, callback) {
+                tableName.should.be.equal('AccountsCollection');
+                batch.operations.length.should.be.eql(2);
+                batch.operations[0].type.should.be.equal('DELETE');
+                batch.operations[0].entity.PartitionKey._.should.be.equal('Dirk');
+                batch.operations[0].entity.RowKey._.should.be.equal('info1@example.com');
+
+                batch.operations[1].type.should.be.equal('DELETE');
+                batch.operations[1].entity.PartitionKey._.should.be.equal('Dirk');
+                batch.operations[1].entity.RowKey._.should.be.equal('info2@example.com');
+
+                callback(null, null, null);
+            });
+
+            var account1 = Account.build({AccountId: "Dirk", Contact:"info1@example.com"});
+            var account2 = Account.build({AccountId: "Dirk", Contact:"info2@example.com"});
+            return Account.delete([account1, account2]).should.be.fulfilled;
+        })
+    });
 });
