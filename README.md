@@ -33,7 +33,7 @@ var Person = azureTables.define({
   LastName: String,
   UniqueIdentifier: String,
   PartitionKey: function(model) {
-    return model.UnqieIdentifier;
+    return model.UniqueIdentifier;
   },
   RowKey: function(model) {
     return model.LastName;
