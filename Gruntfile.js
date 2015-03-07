@@ -15,6 +15,12 @@ module.exports = function (grunt) {
             }
         },
 
+        mocha_istanbul: {
+            coverage: {
+                src: 'test'
+            }
+        },
+
         watch: {
             js: {
                 options: {
@@ -30,4 +36,5 @@ module.exports = function (grunt) {
 
     grunt.registerTask('default', []);
     grunt.registerTask('test', ['mochaTest']);
+    grunt.registerTask('coverage', ['mocha_istanbul:coverage']);
 };
