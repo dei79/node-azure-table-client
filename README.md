@@ -33,15 +33,11 @@ var Person = azureTables.define({
   LastName: String,
   UniqueIdentifier: String,
   PartitionKey: function(model) {
-    return model.UniqueIdentifier;
+    return model.UnqieIdentifier;
   },
   RowKey: function(model) {
     return model.LastName;
-  },
-  TableName: function() {
-    return '<<YourAzureTable>>'
   }
-})
 ```
 
 There are two special fields, the PartitionKey and the RowKey which are used in Azure Tables to identify a single record. During the model defintion a function needs to be defined which can calculate the values during operations against the storage services. When ever the system calls the Azure Storage Services it's recalculating the partition and row key.
