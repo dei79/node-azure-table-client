@@ -182,7 +182,7 @@ describe('AzureTableClient', function() {
 
             sinon.stub(Account.azureCalls, "queryEntities", function (tableName, tableQuery, currentToken, optionsOrCallback, callback) {
                 tableQuery._where[0].should.equal('PartitionKey eq \'123456\' and RowKey eq \'abcd\'');
-                optionsOrCallback(null, { entries: []}, null);
+                optionsOrCallback(null, { entries: [], continuationToken: null}, null);
             });
 
             return Account.query("123456", "abcd").should.be.fulfilled;
@@ -194,7 +194,7 @@ describe('AzureTableClient', function() {
                 tableQuery._fields.length.should.eql(0);
                 (tableQuery._top === null).should.be.ok;
                 tableQuery._where[0].should.equal('PartitionKey eq \'123456\'');
-                optionsOrCallback(null, { entries: []}, null);
+                optionsOrCallback(null, { entries: [], continuationToken: null}, null);
             });
 
             return Account.query("123456", null).should.be.fulfilled;
@@ -206,7 +206,7 @@ describe('AzureTableClient', function() {
                 tableQuery._fields.length.should.eql(0);
                 (tableQuery._top === null).should.be.ok;
                 tableQuery._where[0].should.equal('RowKey eq \'abcd\'');
-                optionsOrCallback(null, { entries: []}, null);
+                optionsOrCallback(null, { entries: [], continuationToken: null}, null);
             });
 
             return Account.query(null, 'abcd').should.be.fulfilled;
@@ -218,7 +218,7 @@ describe('AzureTableClient', function() {
                 tableQuery._fields.length.should.eql(0);
                 (tableQuery._top === null).should.be.ok;
                 tableQuery._where.length.should.be.eql(0);
-                optionsOrCallback(null, { entries: []}, null);
+                optionsOrCallback(null, { entries: [], continuationToken: null}, null);
             });
 
             return Account.query(null, null).should.be.fulfilled;
