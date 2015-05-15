@@ -2,6 +2,7 @@ var azuremodel = require('../lib/azure-table-client.js');
 
 describe('AzureTableClient', function() {
     var Account = undefined;
+    var Membership = undefined;
 
     beforeEach(function () {
 
@@ -27,6 +28,19 @@ describe('AzureTableClient', function() {
             }
         });
 
+        Membership  = azuremodel.define({
+            MemberId: String,
+            Subscriptions: Array,
+            PartitionKey: function (model) {
+                return model.MemberId;
+            },
+            RowKey: function (model) {
+                return model.MemberId;
+            },
+            TableName: function () {
+                return "Memberships";
+            }
+        });
     });
 
     describe('config', function () {
@@ -173,6 +187,43 @@ describe('AzureTableClient', function() {
             });
 
             return account.insert().should.be.fulfilled;
+        })
+
+        it('converts the array element correctly', function () {
+            sinon.stub(Membership.azureCalls, "createTableIfNotExists", function (tableName, callback) {
+                callback(null, null, null);
+            });
+            sinon.stub(Membership.azureCalls, "executeBatch", function (tableName, batch, callback) {
+
+                // check the tablename
+                tableName.should.be.equal("Memberships");
+
+                // check the single batch element we created
+                batch.operations.length.should.be.eql(1);
+
+                batch.operations.forEach(function (operation) {
+
+                    operation.type.should.be.equal('INSERT_OR_REPLACE');
+                    operation.entity.PartitionKey._.should.be.equal('123456');
+                    operation.entity.PartitionKey.$.should.be.equal('Edm.String');
+                    operation.entity.RowKey._.should.be.equal('123456');
+                    operation.entity.RowKey.$.should.be.equal('Edm.String');
+                    operation.entity.MemberId._.should.be.equal('123456');
+                    operation.entity.MemberId.$.should.be.equal('Edm.String');
+                    operation.entity.Subscriptions._.should.be.equal('[1,2,3,"Hello",5]');
+                    operation.entity.Subscriptions.$.should.be.equal('Edm.String');
+                    Object.keys(operation.entity).length.should.be.eql(4);
+                });
+
+                callback(null, null, null);
+            });
+
+            var membership = Membership.build({
+                MemberId: "123456",
+                Subscriptions: [1,2,3,'Hello',5]
+            });
+
+            return membership.insert().should.be.fulfilled;
         })
     });
 
@@ -327,6 +378,36 @@ describe('AzureTableClient', function() {
             }).should.be.fulfilled;
         })
 
+        it("returns valid default objects with array property", function() {
+
+            sinon.stub(Membership.azureCalls, "queryEntities", function (tableName, tableQuery, currentToken, optionsOrCallback, callback) {
+                var results = {
+                    entries: [
+                        {
+                            PartitionKey:   { '$': 'Edm.String', _: '123456' },
+                            RowKey:         { '$': 'Edm.String', _: '123456' },
+                            Timestamp:      { '$': 'Edm.DateTime', _: new Date() },
+                            MemberId:       { _: '123456' },
+                            Subscriptions:  { _: '[1,2,3,"Hello",5]' },
+                            '.metadata':    { etag: 'W/"datetime\'2015-01-24T11:37:28.6472064Z\'"'}
+                        }
+                    ],
+                    continuationToken: null };
+
+                optionsOrCallback(null, results, null);
+            });
+
+            return Membership.query().then(function(results) {
+                results.length.should.eql(1);
+                results[0].MemberId.should.eql('123456');
+                results[0].Subscriptions.length.should.eql(5);
+                results[0].Subscriptions[0].should.eql(1);
+                results[0].Subscriptions[1].should.eql(2);
+                results[0].Subscriptions[2].should.eql(3);
+                results[0].Subscriptions[3].should.eql("Hello");
+                results[0].Subscriptions[4].should.eql(5);
+            }).should.be.fulfilled;
+        });
     });
 
     describe('delete', function() {
