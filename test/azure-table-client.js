@@ -4,13 +4,18 @@ describe('AzureTableClient', function() {
     var Account = undefined;
     var Membership = undefined;
 
+    var tableClient = null;
+
     beforeEach(function () {
 
+        // generate a table client
+        tableClient = new azuremodel.AzureTableClient();
+
         // config the azure table store with a fake account
-        azuremodel.config("fakeAccount", "XDsrm1KPRn5LOFquMkFK013VAM37JErnsAc2t0MWMscbvasZi61hJdsCWbkVb8DCF3q7riPjPsdqx2wlmC5dcQ==");
+        tableClient.config("fakeAccount", "XDsrm1KPRn5LOFquMkFK013VAM37JErnsAc2t0MWMscbvasZi61hJdsCWbkVb8DCF3q7riPjPsdqx2wlmC5dcQ==");
 
         // define a simple contract model
-        Account = azuremodel.define({
+        Account = tableClient.define({
             AccountId: String,
             Name: String,
             Contact: String,
@@ -28,7 +33,7 @@ describe('AzureTableClient', function() {
             }
         });
 
-        Membership  = azuremodel.define({
+        Membership  = tableClient.define({
             MemberId: String,
             Subscriptions: Array,
             PartitionKey: function (model) {
@@ -47,13 +52,13 @@ describe('AzureTableClient', function() {
 
         it('throw exception when using invalid key', function () {
             (function () {
-                azuremodel.config("myaccount", "invalidsecret");
+                tableClient.config("myaccount", "invalidsecret");
             }).should.throw('The provided account key invalidsecret is not a valid base64 string.');
         });
 
         it('finishes without exception when passing valid key', function () {
             (function () {
-                azuremodel.config("myaccount", "XDsrm1KPRn5LOFquMkFK013VAM37JErnsAc2t0MWMscbvasZi61hJdsCWbkVb8DCF3q7riPjPsdqx2wlmC5dcQ==");
+                tableClient.config("myaccount", "XDsrm1KPRn5LOFquMkFK013VAM37JErnsAc2t0MWMscbvasZi61hJdsCWbkVb8DCF3q7riPjPsdqx2wlmC5dcQ==");
             }).should.not.throw();
         })
     });
@@ -114,7 +119,7 @@ describe('AzureTableClient', function() {
         });
 
         it('calls TableName function when saving', function () {
-            var simpleModelDefintion = azuremodel.define({
+            var simpleModelDefintion = tableClient.define({
                 AccountId: String, PartitionKey: function (model) {
                     return model.AccountId;
                 }, RowKey: function (model) {
@@ -338,7 +343,7 @@ describe('AzureTableClient', function() {
 
         it("returns valid default objects with mapped properties", function() {
 
-            var ModelWithQueryMapping = azuremodel.define({
+            var ModelWithQueryMapping = tableClient.define({
                 Value1: String,
                 Value2: String,
                 PartitionKey:  function(model) {

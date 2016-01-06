@@ -7,6 +7,10 @@ A simple to use client for Azure Table Store which allows model definitions (com
 * Batch Operations for multiple hundred or thousand records
 * Validation against the defined weak schema
 
+## Breaking Changes
+**Starting with version 0.4.0 we are exposing a table client class which needs to be used to define, create, query and delete
+entities. This makes it possible to use the module with separate table stores in a single process.**
+
 ## Install 
 Just install the component via npm
 
@@ -19,7 +23,9 @@ The table client needs to be configured before using it the first time. The conf
 
 ```javascript
 var azureTables = require('azure-table-client');
-azureTables.config(<<YOURACCOUNTKEY>>, <<YOURACCOUNTSECRET>>);
+
+var azureTableClient = new azureTables.AzureTableClient();
+azureTableClient.config(<<YOURACCOUNTKEY>>, <<YOURACCOUNTSECRET>>);
 ```
 
 ## Define Models 
@@ -28,7 +34,7 @@ Defining models in the azure table client is as simple as in different ORM imple
 A first simple model can be defined as follows: 
 
 ```javascript 
-var Person = azureTables.define({
+var Person = azureTableClient.define({
   FirstName: String,
   LastName: String,
   UniqueIdentifier: String,
