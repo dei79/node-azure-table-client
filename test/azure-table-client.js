@@ -343,6 +343,8 @@ describe('AzureTableClient', function() {
 
         it("returns valid default objects with mapped properties", function() {
 
+            var tableName = 'DemoTable';
+
             var ModelWithQueryMapping = tableClient.define({
                 Value1: String,
                 Value2: String,
@@ -353,7 +355,7 @@ describe('AzureTableClient', function() {
                     return model.Value2;
                 },
                 TableName: function () {
-                    return "DemoTable";
+                    return tableName;
                 },
                 QueryMapping: {
                     Value1:     'PartitionKey',
