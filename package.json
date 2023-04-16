@@ -12,10 +12,10 @@
     "chai": "^1.10.0",
     "chai-as-promised": "^4.1.1",
     "grunt": "^0.4.5",
-    "grunt-contrib-watch": "^0.6.1",
+    "grunt-contrib-watch": "^1.1.0",
     "grunt-mocha-test": "^0.12.4",
     "load-grunt-tasks": "^2.0.0",
-    "mocha": "^2.1.0",
+    "mocha": "^10.2.0",
     "should": "^4.4.2",
     "sinon": "^1.12.2",
     "sinon-as-promised": "^2.0.3"
